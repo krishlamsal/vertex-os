@@ -1,0 +1,17 @@
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# --- Target Binary  ---
+
+bin/
+
+# --- IDE and Editor Junk ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
