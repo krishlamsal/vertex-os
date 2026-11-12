@@ -377,6 +377,13 @@ var numberArt = map[string]string{
 
 #
 #
+`, ".": `
+.
+.
+.
+.
+#
+#
 `,
 }
 
@@ -447,8 +454,8 @@ func artRows(name string, list map[string]string, maxWidth int) []string {
 
 		var b strings.Builder
 		for x := 0; x < maxWidth; x++ {
-			topOn := top[x] != ' '
-			bottomOn := x < len(bottom) && bottom[x] != ' '
+			topOn := top[x] == '#'
+			bottomOn := x < len(bottom) && bottom[x] == '#'
 			switch {
 			case topOn && bottomOn:
 				b.WriteRune('█')

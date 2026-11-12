@@ -26,13 +26,16 @@ const (
 	Yellow   = "\033[93m"
 	YellowBg = "\033[103m"
 
+	Green   = "\033[92m"
+	GreenBg = "\033[102m"
+
 	White = "\033[37m"
 	Grey  = "\033[90m"
 
 	Bold = "\033[1m"
 )
 
-var Colors []string = []string{Red, RedBg, Blue, BlueBg, Purple, PurpleBg, Cyan, CyanBg, Yellow, YellowBg}
+var Colors []string = []string{Red, RedBg, Blue, BlueBg, Purple, PurpleBg, Cyan, CyanBg, Yellow, YellowBg, Green, GreenBg}
 
 type Key int
 
@@ -238,6 +241,11 @@ func eventFromRune(char rune) (Event, error) {
 	return Event{Key: key}, nil
 }
 
+func getTitle(titleText string, color string) string {
+	linesHalf := strings.Repeat("─", (54-len(titleText)-2)/2)
+	return color + linesHalf + " " + titleText + " " + linesHalf + Reset
+}
+
 func main() {
 	home := &HomeApp{appNames: []string{"Calculator", "Notes", "Calendar", "Camera", "Clock", "Stopwatch", "Timer", "Weather", "Browser", "Phone", "Phonebook", "Messages", "Files", "Text Editor", "Image Viewer", "Audio Player", "Settings", "Help", "System Monitor", "Terminal"},
 		appLogos:   []string{"\uf1ec", "\uf4f6", "\uf455", "\uf030", "\uf43a", "\uf520", "\U000f051f", "\U000f0590", "\U000f059f", "\uf095", "\uee21", "\uf27a", "\uf07b", "\uf15c", "\uf03e", "\U000f04c3", "\uf013", "\uf420", "\uf21e", "\uf489"},
@@ -253,6 +261,8 @@ func main() {
 	// Time and Weather
 	clock := &ClockApp{}
 	manager.Register(clock)
+	stopwatch := &StopwatchApp{}
+	manager.Register(stopwatch)
 
 	fmt.Print("\033[?25l")
 	defer fmt.Print("\033[?25h")

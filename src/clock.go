@@ -2,20 +2,30 @@ package main
 
 import (
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/mattn/go-runewidth"
 )
 
 type ClockApp struct {
+	mu   sync.Mutex
 	stop chan struct{}
 }
 
 func (a *ClockApp) Name() string { return "Clock" }
 
-func (a *ClockApp) Start() error { return nil }
+func (a *ClockApp) Start() error {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	a.stop = make(chan struct{})
+	return nil
+}
 
 func (a *ClockApp) Stop() error {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
 	if a.stop != nil {
 		close(a.stop)
 		a.stop = nil
@@ -26,7 +36,13 @@ func (a *ClockApp) Stop() error {
 func (a *ClockApp) HandleEvent(event Event) (Action, error) { return Action{Kind: ActionNone}, nil }
 
 func (a *ClockApp) Render() error {
-	a.stop = make(chan struct{})
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
+	stopCh := a.stop
+	if stopCh == nil {
+		return nil
+	}
 
 	cities := []string{
 		"America/New_York",
@@ -58,6 +74,8 @@ func (a *ClockApp) Render() error {
 		var frame []string
 		currentTime := time.Now().Format("15:04:05")
 		currentDate := time.Now().Format("2006-01-02")
+
+		frame = append(frame, getTitle("Clock", Blue))
 
 		frame = append(frame, strings.Repeat(" ", 12)+"┌─"+Cyan+currentDate+Reset+strings.Repeat("─", 32-len(currentDate))+"┐")
 
@@ -117,7 +135,7 @@ func (a *ClockApp) Render() error {
 
 		for {
 			select {
-			case <-a.stop:
+			case <-stopCh:
 				return
 			case <-ticker.C:
 				renderFrame()

@@ -39,16 +39,9 @@ func (a *CalculatorApp) boxLine(selected bool, line int, label string) string {
 		if padding < 0 {
 			padding = 0
 		}
-
-		if selected {
-			return accent + "│" + accentBg + strings.Repeat(" ", (a.boxWidth-2)/2) + White + label + strings.Repeat(" ", (a.boxWidth-2)/2) + reset + accent + "│ " + reset
-		}
-		return "│" + strings.Repeat(" ", (a.boxWidth-2)/2) + label + strings.Repeat(" ", (a.boxWidth-2)/2) + "│ "
+		return accent + "│" + accentBg + strings.Repeat(" ", (a.boxWidth-2)/2) + White + label + strings.Repeat(" ", (a.boxWidth-2)/2) + reset + accent + "│ " + reset
 	default:
-		if selected {
-			return accent + "│" + accentBg + strings.Repeat(" ", a.boxWidth-2) + reset + accent + "│ " + reset
-		}
-		return "│" + strings.Repeat(" ", a.boxWidth-2) + "│ "
+		return accent + "│" + accentBg + strings.Repeat(" ", a.boxWidth-2) + reset + accent + "│ " + reset
 	}
 }
 
@@ -270,14 +263,12 @@ func (a *CalculatorApp) Render() error {
 	// 1  2  3  +
 	// 0  %  .  =
 
-	title := "Calculator"
 	lines := strings.Repeat("─", 54)
-	linesHalf := strings.Repeat("─", (54-len(title)-2)/2)
 	currentTotalStr := strconv.FormatFloat(a.currentTotal, 'f', -1, 64)
 	currentTotalStr2 := strconv.FormatFloat(a.currentTotal2, 'f', -1, 64)
 
 	var frame []string
-	frame = append(frame, Red+linesHalf+" "+title+" "+linesHalf+Reset)
+	frame = append(frame, getTitle("Calculator", Red))
 
 	display := a.inputBuffer
 	if display == "" {
