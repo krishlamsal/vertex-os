@@ -26,6 +26,22 @@ Download the latest release binary and place it in your system's `PATH` (e.g., `
 
 - [x] Launcher
 
+
+
+#### Utilities
+
+  - [x] Calculator
+  - [ ] Notes
+  - [ ] Calendar
+  - [ ] Camera
+
+#### Time and Weather
+
+  - [x] Clock
+  - [x] Stopwatch
+  - [ ] Timer
+  - [ ] Weather
+
 #### Communication
 
   - [ ] Browser
@@ -39,20 +55,6 @@ Download the latest release binary and place it in your system's `PATH` (e.g., `
   - [ ] Text Editor
   - [ ] Audio Player
   - [ ] Files
-
-#### Time and Weather
-
-  - [x] Clock
-  - [ ] Alarms
-  - [ ] Timer
-  - [ ] Weather
-
-#### Utilities
-
-  - [x] Calculator
-  - [ ] Calendar
-  - [ ] Notes
-  - [ ] Camera
 
 #### Advanced
 

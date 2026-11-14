@@ -30,7 +30,9 @@ const (
 	GreenBg = "\033[102m"
 
 	White = "\033[37m"
-	Grey  = "\033[90m"
+
+	Grey   = "\033[90m"
+	GreyBg = "\033[100m"
 
 	Bold = "\033[1m"
 )
@@ -263,6 +265,8 @@ func main() {
 	manager.Register(clock)
 	stopwatch := &StopwatchApp{}
 	manager.Register(stopwatch)
+	timer := &TimerApp{}
+	manager.Register(timer)
 
 	fmt.Print("\033[?25l")
 	defer fmt.Print("\033[?25h")
