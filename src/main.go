@@ -250,9 +250,10 @@ func getTitle(titleText string, color string) string {
 }
 
 func main() {
-	home := &HomeApp{appNames: []string{"Calculator", "Notes", "Calendar", "Camera", "Clock", "Stopwatch", "Timer", "Weather", "Browser", "Phone", "Phonebook", "Messages", "Files", "Text Editor", "Image Viewer", "Audio Player", "Settings", "Help", "System Monitor", "Terminal"},
-		appLogos:   []string{"\uf1ec", "\uf4f6", "\uf455", "\uf030", "\uf43a", "\uf520", "\U000f051f", "\U000f0590", "\U000f059f", "\uf095", "\uee21", "\uf27a", "\uf07b", "\uf15c", "\uf03e", "\U000f04c3", "\uf013", "\uf420", "\uf21e", "\uf489"},
-		pageTitles: []string{"Utilities", "Time and Weather", "Communication", "File Management", "Advanced"}, maxPage: 4}
+	home := &HomeApp{appNames: []string{"Calculator", "Notes", "Calendar", "Camera", "Unit Converter", "Tally", "Metronome", "Flashlight", "Clock", "Stopwatch", "Timer", "Weather", "Browser", "Phone", "Phonebook", "Messages", "Files", "Text Editor", "Image Viewer", "Audio Player", "Settings", "Help", "System Monitor", "Terminal"},
+		appLogos:        []string{"\uf1ec", "\uf4f6", "\uf455", "\uf030", "\uf443", "\U000f1ac0", "\U000f07da", "\U000f0244", "\uf43a", "\uf520", "\U000f051f", "\U000f0590", "\U000f059f", "\uf095", "\uee21", "\uf27a", "\uf07b", "\uf15c", "\uf03e", "\U000f04c3", "\uf013", "\uf420", "\uf21e", "\uf489"},
+		pageTitles:      []string{"Utilities", "Utilities", "Time and Weather", "Communication", "File Management", "Advanced"},
+		pageTitleColors: []string{Red, Red, Blue, Purple, Cyan, Yellow}}
 	manager := NewManager(home)
 
 	// Utilities
@@ -260,6 +261,9 @@ func main() {
 	manager.Register(calculator)
 	notes := &NotesApp{}
 	manager.Register(notes)
+
+	tally := &TallyApp{}
+	manager.Register(tally)
 
 	// Time and Weather
 	clock := &ClockApp{}

@@ -9,17 +9,17 @@ import (
 )
 
 type HomeApp struct {
-	selectedIndexX int
-	selectedIndexY int
-	currentPage    int
-	maxPage        int
-	appNames       []string
-	appLogos       []string
-	pageTitles     []string
-	accent         string
-	accentBg       string
-	boxWidth       int
-	boxHeight      int
+	selectedIndexX  int
+	selectedIndexY  int
+	currentPage     int
+	appNames        []string
+	appLogos        []string
+	pageTitles      []string
+	pageTitleColors []string
+	accent          string
+	accentBg        string
+	boxWidth        int
+	boxHeight       int
 }
 
 func randomizeColors(a *HomeApp) {
@@ -50,6 +50,8 @@ func (a *HomeApp) Stop() error { return nil }
 func (a *HomeApp) HandleEvent(event Event) (Action, error) {
 	oldX, oldY := a.selectedIndexX, a.selectedIndexY
 	oldPage := a.currentPage
+
+	pageCount := (len(a.appNames) + 3) / 4
 
 	switch event.Key {
 	case KeyOK:
@@ -84,10 +86,10 @@ func (a *HomeApp) HandleEvent(event Event) (Action, error) {
 		if a.currentPage > 0 {
 			a.currentPage--
 		} else {
-			a.currentPage = a.maxPage
+			a.currentPage = pageCount
 		}
 	case KeyPageRight:
-		if a.currentPage < a.maxPage {
+		if a.currentPage < pageCount-1 {
 			a.currentPage++
 		} else {
 			a.currentPage = 0
@@ -120,7 +122,8 @@ func (a *HomeApp) Render() error {
 
 	gridWidth := 52
 	pageTitle := a.pageTitles[a.currentPage]
-	pageTitleColor := Colors[a.currentPage*2]
+
+	pageTitleColor := a.pageTitleColors[a.currentPage]
 
 	var frame []string
 	frame = append(frame, getTitle(pageTitle, pageTitleColor))

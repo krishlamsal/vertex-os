@@ -35,6 +35,11 @@ Download the latest release binary and place it in your system's `PATH` (e.g., `
   - [ ] Calendar
   - [ ] Camera
 
+  - [ ] Unit Converter
+  - [x] Tally
+  - [ ] Metronome
+  - [ ] Flashlight
+
 #### Time and Weather
 
   - [x] Clock
