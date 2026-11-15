@@ -120,11 +120,10 @@ func (a *HomeApp) Render() error {
 
 	gridWidth := 52
 	pageTitle := a.pageTitles[a.currentPage]
-	pageTitleLines := strings.Repeat("─", gridWidth/2-len(pageTitle)/2-1)
 	pageTitleColor := Colors[a.currentPage*2]
 
 	var frame []string
-	frame = append(frame, pageTitleColor+pageTitleLines+" "+pageTitle+" "+pageTitleLines+Reset)
+	frame = append(frame, getTitle(pageTitle, pageTitleColor))
 
 	for y := 0; y < 2; y++ {
 		var logos, labels [2]string

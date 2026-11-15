@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/eiannone/keyboard"
+	"github.com/mattn/go-runewidth"
 )
 
 const (
@@ -244,7 +245,7 @@ func eventFromRune(char rune) (Event, error) {
 }
 
 func getTitle(titleText string, color string) string {
-	linesHalf := strings.Repeat("─", (54-len(titleText)-2)/2)
+	linesHalf := strings.Repeat("─", (54-runewidth.StringWidth(titleText)-2)/2)
 	return color + linesHalf + " " + titleText + " " + linesHalf + Reset
 }
 
@@ -255,10 +256,10 @@ func main() {
 	manager := NewManager(home)
 
 	// Utilities
-	notes := &NotesApp{}
-	manager.Register(notes)
 	calculator := &CalculatorApp{}
 	manager.Register(calculator)
+	notes := &NotesApp{}
+	manager.Register(notes)
 
 	// Time and Weather
 	clock := &ClockApp{}
@@ -267,6 +268,8 @@ func main() {
 	manager.Register(stopwatch)
 	timer := &TimerApp{}
 	manager.Register(timer)
+	weather := &WeatherApp{}
+	manager.Register(weather)
 
 	fmt.Print("\033[?25l")
 	defer fmt.Print("\033[?25h")

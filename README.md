@@ -39,8 +39,8 @@ Download the latest release binary and place it in your system's `PATH` (e.g., `
 
   - [x] Clock
   - [x] Stopwatch
-  - [ ] Timer
-  - [ ] Weather
+  - [x] Timer
+  - [x] Weather
 
 #### Communication
 
