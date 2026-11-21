@@ -262,6 +262,8 @@ func main() {
 	notes := &NotesApp{}
 	manager.Register(notes)
 
+	randomizer := &RandomizerApp{}
+	manager.Register(randomizer)
 	tally := &TallyApp{}
 	manager.Register(tally)
 	metronome := &MetronomeApp{}
