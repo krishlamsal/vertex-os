@@ -35,7 +35,7 @@ Download the latest release binary and place it in your system's `PATH` (e.g., `
   - [ ] Calendar
   - [ ] Camera
     
-  - [ ] Randomizer
+  - [x] Randomizer
   - [x] Tally
   - [x] Metronome
   - [x] Flashlight
