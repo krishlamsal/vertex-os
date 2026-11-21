@@ -21,45 +21,146 @@ type location struct {
 	Country string `json:"country"`
 }
 
-func remove[T any](array []T, index int) []T {
-	return append(array[:index], array[index+1:]...)
+func isWeatherInfoLine(line string) bool {
+	trimmed := strings.TrimSpace(line)
+	for _, prefix := range []string{"Weather:", "Timezone:", "Now", "Zenith:", "Location:"} {
+		if strings.Contains(trimmed, prefix) {
+			return true
+		}
+	}
+	return false
+}
+
+func isMoonLine(line string) bool {
+	for _, r := range line {
+		switch r {
+		case '🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘':
+			return true
+		}
+	}
+	return false
+}
+
+func isMoonUnderlineLine(line string) bool {
+	trimmed := strings.TrimSpace(line)
+	runes := []rune(trimmed)
+	if len(runes) < 2 || runes[0] != '│' || runes[len(runes)-1] != '│' {
+		return false
+	}
+	hasDash := false
+	for _, r := range runes[1 : len(runes)-1] {
+		if r == '─' {
+			hasDash = true
+			continue
+		}
+		if r != ' ' {
+			return false
+		}
+	}
+	return hasDash
+}
+
+func isBottomBorderLine(line string) bool {
+	trimmed := strings.TrimSpace(line)
+	runes := []rune(trimmed)
+	if len(runes) < 2 || runes[0] != '└' || runes[len(runes)-1] != '┘' {
+		return false
+	}
+	for _, r := range runes[1 : len(runes)-1] {
+		if r != '─' {
+			return false
+		}
+	}
+	return true
+}
+
+func isBorderOnlyLine(line string) bool {
+	trimmed := strings.TrimSpace(line)
+	if len(trimmed) < 2 {
+		return false
+	}
+	runes := []rune(trimmed)
+	if runes[0] != '│' || runes[len(runes)-1] != '│' {
+		return false
+	}
+	for _, r := range runes[1 : len(runes)-1] {
+		if r != ' ' {
+			return false
+		}
+	}
+	return true
+}
+
+func isTopSeparatorLine(line string) bool {
+	if !strings.Contains(line, "╷") {
+		return false
+	}
+	trimmed := strings.TrimSpace(line)
+	runes := []rune(trimmed)
+	if len(runes) < 2 || runes[0] != '│' || runes[len(runes)-1] != '│' {
+		return false
+	}
+	for _, r := range runes[1 : len(runes)-1] {
+		if r != ' ' && r != '╷' {
+			return false
+		}
+	}
+	return true
 }
 
 func weatherGraph(weatherReport string) string {
-	graph := strings.Trim(weatherReport, "\n")
+	lines := strings.Split(strings.Trim(weatherReport, "\n"), "\n")
+	filtered := make([]string, 0, len(lines))
 
-	splitGraph := strings.Split(graph, "\n")
-
-	for i := 0; i < 5; i++ {
-		splitGraph = remove(splitGraph, len(splitGraph)-1) // Info
+	for _, line := range lines {
+		if strings.Contains(line, "Weather report:") {
+			continue
+		}
+		if isWeatherInfoLine(line) {
+			continue
+		}
+		if isTopSeparatorLine(line) {
+			continue
+		}
+		if isBorderOnlyLine(line) {
+			continue
+		}
+		if isMoonLine(line) || isMoonUnderlineLine(line) {
+			continue
+		}
+		filtered = append(filtered, line)
 	}
 
-	splitGraph = remove(splitGraph, 35) // Lines under moon phase
-	splitGraph = remove(splitGraph, 34) // Moon phases
-	splitGraph = remove(splitGraph, 33) // Blank line
-	splitGraph = remove(splitGraph, 30) // Blank line
-	splitGraph = remove(splitGraph, 28) // Blank line
+	if len(filtered) == 0 {
+		return ""
+	}
 
-	splitGraph = remove(splitGraph, 5) // Blank line
-	splitGraph = remove(splitGraph, 4) // Separator lines
-	splitGraph = remove(splitGraph, 2) // Blank line
-	splitGraph = remove(splitGraph, 1) // Blank line
-	splitGraph = remove(splitGraph, 0) // Weather Report: Location
+	r := []rune(filtered[0])
+	if len(r) >= 2 {
+		r[0] = '┬'
+		r[len(r)-1] = '┬'
+		filtered[0] = string(r)
+	}
 
-	// Cap off top
-	r := []rune(splitGraph[0])
-	r[0] = '┬'
-	r[len(r)-1] = '┬'
-	splitGraph[0] = string(r)
-
-	graph = strings.Join(splitGraph, "\n")
-
-	return graph
+	return strings.Join(filtered, "\n")
 }
 
 func weatherInfo(weatherReport string) string {
-	splitReport := strings.Split(weatherReport, "\n")
-	return strings.Join(splitReport[len(splitReport)-6:], "\n"+Grey+strings.Repeat("─", 54)+Reset+"\n")
+	lines := strings.Split(strings.Trim(weatherReport, "\n"), "\n")
+	info := make([]string, 0, 6)
+	for _, line := range lines {
+		if isWeatherInfoLine(line) {
+			info = append(info, line)
+		}
+	}
+	if len(info) == 0 {
+		if len(lines) > 5 {
+			info = lines[len(lines)-5:]
+		} else {
+			info = lines
+		}
+	}
+	return strings.Join(info, "\n"+Grey+strings.Repeat("─", 54)+Reset+"\n")
 }
 
 func (a *WeatherApp) Name() string { return "Weather" }

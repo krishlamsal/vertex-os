@@ -35,10 +35,10 @@ Download the latest release binary and place it in your system's `PATH` (e.g., `
   - [ ] Calendar
   - [ ] Camera
     
-  - [ ] Unit Converter
+  - [ ] Randomizer
   - [x] Tally
-  - [ ] Metronome
-  - [ ] Flashlight
+  - [x] Metronome
+  - [x] Flashlight
 
 #### Time and Weather
 

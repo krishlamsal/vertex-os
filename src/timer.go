@@ -17,6 +17,18 @@ import (
 var timerSounds embed.FS
 
 var (
+	speakerOnce sync.Once
+	speakerErr  error
+)
+
+func initSpeaker(format beep.Format) error {
+	speakerOnce.Do(func() {
+		speakerErr = speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/10))
+	})
+	return speakerErr
+}
+
+var (
 	timerSoundOnce sync.Once
 	timerSound     *beep.Buffer
 	timerSoundErr  error
@@ -59,7 +71,7 @@ func loadTimerSound() (*beep.Buffer, error) {
 		}
 		defer streamer.Close()
 
-		if err := speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/10)); err != nil {
+		if err := initSpeaker(format); err != nil {
 			timerSoundErr = err
 			return
 		}
