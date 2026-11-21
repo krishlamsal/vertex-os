@@ -111,7 +111,7 @@ func (a *TallyApp) Render() error {
 		for j := 0; j < len(paddedStr); j++ {
 			currentChar := string(paddedStr[j])
 
-			if currentChar != "0" {
+			if currentChar != "0" && currentChar != "-" {
 				row.WriteString(Reset)
 			}
 

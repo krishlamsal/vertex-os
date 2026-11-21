@@ -264,6 +264,8 @@ func main() {
 
 	tally := &TallyApp{}
 	manager.Register(tally)
+	flashlight := &FlashlightApp{}
+	manager.Register(flashlight)
 
 	// Time and Weather
 	clock := &ClockApp{}
